@@ -33,8 +33,10 @@ function [xs, ys] = find_mode(start, relief, kernel)
     pad = round(n/2+1);
     [mx, my] = meshgrid([1:n]);
         
-    xs = [start(1)];
-    ys = [start(2)];
+    relief = padarray(relief, [pad pad], 0);
+    
+    xs = [start(1)+pad];
+    ys = [start(2)+pad];
            
     while true
         
@@ -59,6 +61,9 @@ function [xs, ys] = find_mode(start, relief, kernel)
         xs = [xs x_n];
         ys = [ys y_n];
     end
+    
+    xs = xs-pad
+    ys = ys-pad
 end
 
 function [x1, y1, x2, y2] = square_points(x, y, n)
