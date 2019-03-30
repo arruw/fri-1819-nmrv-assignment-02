@@ -1,6 +1,6 @@
 load('helpers/tabulated.mat');
 
-kernel = ones(15);%create_epanechnik_kernel(10, 10, 0.5);
+kernel = ones(20);%create_epanechnik_kernel(10, 10, 0.5);
 
 figure(1);
 hold on;
@@ -15,22 +15,25 @@ function button_down_handler(src, eventdata, relief, kernel)
 
     plot(x, y, 'rx','MarkerSize', 20);
     
-    find_mode([x y], relief, kernel);
+    [xs, ys] = find_mode([x y], relief, kernel);
+    
+    plot(xs, ys, '-r.','MarkerSize',8);
 end
 
-function find_mode(start, relief, kernel)
+function [xs, ys] = find_mode(start, relief, kernel)
+
     n = size(kernel, 1);
     pad = round(n/2+1);
     [mx, my] = meshgrid([1:n]);
-    
-    x_c = start(1);
-    y_c = start(2);
+        
+    xs = [start(1)];
+    ys = [start(2)];
            
     while true
         
-        frame_x = round(x_c-n/2);
-        frame_y = round(y_c-n/2);
-
+        frame_x = round(xs(end)-n/2);
+        frame_y = round(ys(end)-n/2);
+        
         frame = relief(...
             [frame_y:frame_y+n-1],...
             [frame_x:frame_x+n-1]...
@@ -39,17 +42,15 @@ function find_mode(start, relief, kernel)
         x_n = round(sum((mx+frame_x).*frame)/sum(frame));
         y_n = round(sum((my+frame_y).*frame)/sum(frame));
 
-        dx = x_n - x_c;
-        dy = y_n - y_c;
+        dx = x_n - xs(end);
+        dy = y_n - ys(end);
 
         if dx == 0 && dy == 0
             break
         end  
-        
-        plot([x_c x_n], [y_c y_n], '-r.','MarkerSize',8);
-        
-        x_c = x_n;
-        y_c = y_n;
+                
+        xs = [xs x_n];
+        ys = [ys y_n];
     end
 end
 
