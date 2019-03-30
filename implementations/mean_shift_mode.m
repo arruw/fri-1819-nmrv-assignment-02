@@ -49,6 +49,7 @@ function [xs, ys] = find_mode(start, relief, kernel)
     pad = round(n/2+1);
     [mx, my] = meshgrid(1:n);
         
+    % Pad edges with 0
     relief = padarray(relief, [pad pad], 0);
     
     xs = [start(1)+pad];
