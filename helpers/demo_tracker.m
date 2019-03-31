@@ -3,9 +3,9 @@ function demo_tracker()
 % TODO: put name oy four tracker here
 tracker_name = 'ncc';
 % TODO: select a sequence you want to test on
-sequence = 'tiger';
+sequence = 'bolt1';
 % TODO: give path to the dataset folder
-dataset_path = 'D:\non-dropbox\votSequences2016';
+dataset_path = './resources/vot2018';
 
 use_reinitialization = true;
 skip_after_fail = 5;

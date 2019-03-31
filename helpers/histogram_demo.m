@@ -1,5 +1,5 @@
 
-I = imread('00000001.jpg');
+I = imread('./resources/00000001.jpg');
 
 region = [93, 71, 146, 168];
 
