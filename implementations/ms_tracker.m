@@ -32,6 +32,12 @@ if size(gt,2) > 4
     gt = [X0, Y0, W, H];
 end
 
+% Parameters
+bins = 6;
+eps = 0.00001;
+lambda = 0.2;
+steps = 20;
+
 start_frame = 1;
 n_failures = 0;
 
@@ -44,11 +50,10 @@ while frame <= numel(img_dir)
     
     if frame == start_frame
         % initialize tracker
-        tracker = initialize(img, gt(frame,:));
-        bbox = gt(frame, :);
+        [tracker, bbox] = initialize(img, gt(frame,:), bins, eps, lambda);
     else
         % update tracker (target localization + model update)
-        [tracker, bbox] = update(tracker, img);
+        [tracker, bbox] = update(tracker, img, bins, eps, lambda, steps);
     end
     
     % show image
@@ -79,7 +84,6 @@ while frame <= numel(img_dir)
     end
     
     frame = frame + 1;
-    break;
 end
 
 end  % endfunction

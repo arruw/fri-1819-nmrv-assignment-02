@@ -34,7 +34,6 @@ else
 end
 
 if ~isempty(weights)
-    size(weights)
     histogram = accumarray(image, weights(:), bins);
 else
     histogram = accumarray(image, 1, bins);

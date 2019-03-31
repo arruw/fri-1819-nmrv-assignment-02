@@ -1,43 +1,41 @@
-function [state, location] = ms_update(state, I, varargin)
+function [state, bbox] = ms_update(state, I, bins, eps, lambda, steps)
 
-    % Add padding
-    I = padarray(I, [state.window state.window], 0);
-    state.position = state.position+state.window;
-
-    [height, width] = size(I);
-
-    [x1, y1, x2, y2] = get_region(state);
+    % get template region with padding
+    x1 = state.region(1);
+    y1 = state.region(2);
+    x2 = state.region(3);
+    y2 = state.region(4);
+        
+    while true
     
-    region = I((y1:y2)+1, (x1:x2)+1, :);
-
-    if any(size(region) < size(state.template))
-        location = [state.position - state.size / 2, state.size];
-        return;
-    end;
-
-    C = normxcorr2(state.template, region);
-
-    % We are only using valid part of the response (where full template is used)
-    pad = size(state.template) - 1;
-    center = size(region) - pad - 1;
-    C = C([false(1,pad(1)) true(1,center(1))], [false(1,pad(2)) true(1,center(2))]);
-
-    x1 = x1 + pad(2);
-    y1 = y1 + pad(1);
-    [~, imax] = max(C(:));
-    [my, mx] = ind2sub(size(C),imax(1));
-
-    position = [x1 + mx - state.size(1) / 2, y1 + my - state.size(2) / 2];
-
-    state.position = position;
-    location = [position - state.size / 2, state.size];
-    state.max_corr = max(C(:));
-
-end
-
-function [x1, y1, x2, y2] = get_region(state)
-    x1 = max(1, round(state.position(1) - state.window / 2));
-    y1 = max(1, round(state.position(2) - state.window / 2));
-    x2 = min(width-2, round(state.position(1) + state.window / 2));
-    y2 = min(height-2, round(state.position(2) + state.window / 2));
+        % get template
+        template = I(y1:y2, x1:x2, :);
+        
+        % calculate weights
+        p = extract_histogram(template, bins, state.kernel);
+        v(:,:,1) = (state.q(:,:,1)./(p(:,:,1)+eps)).^(0.5);
+        v(:,:,2) = (state.q(:,:,2)./(p(:,:,2)+eps)).^(0.5);
+        v(:,:,3) = (state.q(:,:,3)./(p(:,:,3)+eps)).^(0.5);
+        w = backproject_histogram(template, v);
+        
+        % execute meanshift step
+        [dx, dy] = meanshift_step(w, state.mx, state.my);
+        
+        % update template region
+        x1 = x1 + dx;
+        x2 = x2 + dx;
+        y1 = y1 + dy;
+        y2 = y2 + dy;
+        
+        % stop when meanshift converges
+        if (dx == 0 && dy == 0) || steps == 0
+            break
+        end
+        
+        steps = steps - 1;
+    end
+        
+    state.region = [x1 y1 x2 y2];
+    
+    bbox = [x1 y1 state.size];
 end
