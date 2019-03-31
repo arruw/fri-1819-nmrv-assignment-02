@@ -23,7 +23,8 @@ kernels = {
     {'epanechnikov-23', epanechnikov_shadow(23)}
 };
 
-steps = 50;
+responses = random_response(10);
+steps = 20;
 
 % This allow us to click on figure and trigger mean shif algorithm
 figure(1);
@@ -39,7 +40,7 @@ axis square;
 % axis([0 100 0 100]);
 % axis square;
 % imagesc(responses);
-% pause(3);
+% pause(1);
 % 
 % results = {}
 % for ki = [1:size(kernels, 1)]
@@ -61,7 +62,7 @@ axis square;
 %     clf;
 % end
 % result = montage(results, 'Size', [4 4]);
-% imwrite(result.CData, './results/mean-shift-comparison.png');
+% imwrite(result.CData, './results/mean-shift-comparison-random.png');
 
 function test(x, y, relief, kernel, steps)
     % Find path
@@ -180,4 +181,18 @@ function img = get_frame_image(ax)
     ti = ax.TightInset+10;
     F = getframe(ax);
     img = frame2im(F);
+end
+
+function responses = random_response(i)
+    responses = zeros(100, 100);
+    
+    mask = fspecial('gaussian', [30 30], 4);
+    
+    for i = [1:i]
+%       mask = fspecial('gaussian', [30 30], sum(rand([2 4]), 'all'));
+        rx = randi([1, 70]);
+        ry = randi([1, 70]);
+       
+        responses([rx:rx+30-1], [ry:ry+30-1]) = responses([rx:rx+30-1], [ry:ry+30-1])+mask;
+    end
 end
