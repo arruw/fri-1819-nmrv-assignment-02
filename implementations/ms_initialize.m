@@ -14,7 +14,7 @@ function [state, bbox] = ms_initialize(I, bbox, bins, eps, lambda)
     end
         
     template = I(y1:y2, x1:x2, :);
-       
+          
     state = struct('template', template, 'size', [x2 - x1 + 1, y2 - y1 + 1]);
     state.region = [x1 y1 x2 y2];   
     state.kernel = create_epanechnik_kernel(state.size(2), state.size(1), lambda);
@@ -23,8 +23,7 @@ function [state, bbox] = ms_initialize(I, bbox, bins, eps, lambda)
     kx2 = floor(state.size(1) / 2);
     ky2 = floor(state.size(2) / 2);
     
-    state.mx = meshgrid(-kx2:kx2);
-    state.my = meshgrid(-ky2:ky2);
+    [state.mx, state.my] = meshgrid(-kx2:kx2, -ky2:ky2);
     
     bbox = [x1, y1, state.size];
 end

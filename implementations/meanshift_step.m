@@ -1,20 +1,18 @@
 function [dx, dy] = meanshift_step(w, mx, my)
-    
-    % current position in the center
-    x_c = round(size(w, 2)/2);
-    y_c = round(size(w, 1)/2);
+% INPUT:
+% w: matrix of weights
+% mx: matrix of x indexes from negative to positive [-2 -1 0 1 2]
+% my: matrix of y indexes from negative to positive [-2 -1 0 1 2]
+% OUTPUT:
+% dx: change in direction of x
+% dy: change in direction of y
 
     % calculate next position
-    x_n = x_c;
-    y_n = y_c;
+    dx = 0;
+    dy = 0;
     sw = sum(w, 'all');
     if sw ~= 0
-        x_n = round(sum(mx .* w, 'all') / sw);
-        y_n = round(sum(my .* w, 'all') / sw);
-    end
-    
-    % calculate displacement
-    dx = x_n - x_n;
-    dy = y_n - y_n;
-                
+        dx = sum(mx .* w, 'all') / sw;
+        dy = sum(my .* w, 'all') / sw;
+    end                
 end

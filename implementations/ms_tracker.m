@@ -1,5 +1,8 @@
 function ms_tracker()
 
+clc;
+clear;
+
 % name of tracker
 tracker_name = 'ms';
 % selected sequence you want to test on
@@ -33,9 +36,9 @@ if size(gt,2) > 4
 end
 
 % Parameters
-bins = 6;
-eps = 0.00001;
-lambda = 0.2;
+bins = 3;
+eps = 0.00000000001;
+lambda = 0.001;
 steps = 20;
 
 start_frame = 1;
@@ -56,9 +59,10 @@ while frame <= numel(img_dir)
         [tracker, bbox] = update(tracker, img, bins, eps, lambda, steps);
     end
     
+    hold on;
+    subplot(4, 4, 1:12);
     % show image
     imshow(img);
-    hold on;
     rectangle('Position',bbox, 'LineWidth',2, 'EdgeColor','y');
     % show current number of failures
     text(12, 15, sprintf('Failures: %d', n_failures), 'Color','w', ...
