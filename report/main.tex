@@ -1,0 +1,43 @@
+\documentclass[runningheads]{llncs}
+%
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{siunitx}
+% 
+\begin{document}
+% 
+\title{Report 2: Mean-Shift Tracker}
+\author{Matjaž Mav}
+\institute{Advanced Computer Vision Methods}
+%
+\maketitle              % typeset the header of the contribution
+% 
+
+\section{Introduction}
+In this exercise we had two tasks. First we had to implement Mean-Shift algorithm and test it on 2D intensity field with different parameters. And for the second one we had to implement Mean-Shift based tracker and test it on few VOT challenge datasets with different parameters.
+
+\section{Mean-Shift}
+Mean-Shift algorithm is used to iteratively find local maximum on some 2D intensity field from given starting point. Our task ware to implement it and find how different parameters effect conversion time (in steps) and accuracy.
+
+\subsection{Implementation}
+\subsection{Comparison}
+We compared Mean-Shift algorithm on different Gaussian and Epanechnikov kernels, kernel sizes and starting locations.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1.0\textwidth]{results/mean-shift-comparison.png}
+    \caption{Comparison of Mean-Shift algorithm between the Gaussian and the Epanechnikov kernel respective to the kernel size and in case of Gaussian the lambda parameter. At the bottom left corner of each tile is its label in the following format:\newline \textit{\textless kernel-name\textgreater-\textless kernel-size\textgreater-\textless lambda\textgreater}}
+    \label{img_meanshift}
+\end{figure}
+
+\section{Mean-Shift Tracker}
+\subsection{Implementation}
+\subsection{Comparison}
+
+\section{Conclusion}
+
+
+\end{document}
