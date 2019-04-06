@@ -6,6 +6,7 @@
 \usepackage{hyperref}
 \usepackage{listings}
 \usepackage{siunitx}
+\usepackage{csvsimple}
 % 
 \begin{document}
 % 
@@ -14,8 +15,8 @@
 \institute{Advanced Computer Vision Methods}
 %
 \maketitle              % typeset the header of the contribution
-% 
-
+%
+ 
 \section{Introduction}
 In this exercise we had two tasks. First we had to implement Mean-Shift algorithm and test it on 2D intensity field with different parameters. And for the second one we had to implement Mean-Shift based tracker and test it on few VOT challenge datasets with different parameters.
 
@@ -29,13 +30,42 @@ We compared Mean-Shift algorithm on different Gaussian and Epanechnikov kernels,
 \begin{figure}
     \centering
     \includegraphics[width=1.0\textwidth]{results/mean-shift-comparison.png}
-    \caption{Comparison of Mean-Shift algorithm between the Gaussian and the Epanechnikov kernel respective to the kernel size and in case of Gaussian the lambda parameter. At the bottom left corner of each tile is its label in the following format:\newline \textit{\textless kernel-name\textgreater-\textless kernel-size\textgreater-\textless lambda\textgreater}}
+    \caption{Comparison of Mean-Shift algorithm between the Gaussian and the Epanechnikov kernel respective to the kernel size and in case of Gaussian the lambda parameter. At the bottom left corner of each tile is its label in the following format:\newline \textit{\textless kernel-name\textgreater-\textless kernel-size\textgreater-\textless lambda\textgreater}
+    \newline \textit{Red dot} ... starting point
+    \newline \textit{Number} ... number of steps to conversion (limited to 20)
+    \newline \textit{Black line} ... conversion path
+    \newline \textit{Red cross} ... conversion point}
     \label{img_meanshift}
 \end{figure}
 
+\newpage
 \section{Mean-Shift Tracker}
-\subsection{Implementation}
-\subsection{Comparison}
+
+Next our task ware implementation of the Mean-Shift tracker, based on the Mean-Shift algorithm that we implemented before. To make it simpler we used Epanechnikov kernel for weighting the intensity field of each tracking region.
+
+Because our submission is limited in size, we prepared one video for each image sequence that we picked. In order to be clearer where the tracker failed, we rendered videos at 15 frames per second. This videos can be found here: \url{https://photos.app.goo.gl/X7AAanHARdkHYvHD6}
+
+\subsection{Selected VOT image sequences}
+
+We tested our tracker on a 5 different image sequences:
+\begin{enumerate}
+\item \textbf{ball1} This image sequence seemed easy to track because the ball moves relatively slow, the background color is constant and in contrast to the ball. On this sequence our tracker didn't failed. (Source: \textit{VOT 2014, ball})
+\item \textbf{ball2} Next we picked another image sequence that tracks ball. But this time, the ball moved faster, the background doesn't have constant color, even the background color is rather similar to the ball. On this sequence our tracker failed 5 times.(Source: \textit{VOT 2018, ball1})
+\item \textbf{bolt1} This image sequence tracks Usain Bolt while sprinting. Bolt is dressed in white shirt and in the background is red sand, grass and other competitors. Some of the competitors are dressed similarly. Along the track, there are some black speakers that also disturb our tracker. Therefore Usain Bolt is not always clearly in contract to the background, but our tracker surprisingly don't fail. (Source: \textit{VOT 2018, bolt2})
+\item \textbf{car1} This image sequence is tracking the car from the followers car behind in traffic. It seems that image sequence is manually taken from inside of the followers car, because image is very unstable, also water droplets are visible on the windshield. Additionally, most of the image colors seems unsaturated and blueish, except for the rear red lights. This image sequence turned out to be hard to track with our tracker. With optimal parameters our tracker failed 5 times. But unfortunately we weren't able to render video with this set of the parameters. We had to drop mean-shift conversion limitation from 20 to 10 steps, in order to be able to render video. Whit this set of the parameters our tracker failed 18 times. (Source: \textit{VOT 2018, car1})
+\item \textbf{hand} On this image sequence our tracker failed 5 times. (Source: \textit{VOT 2018, hand})
+\end{enumerate}
+
+\subsection{Testing different parameters}
+
+
+
+\begin{table}
+\centering
+\csvautotabular{./results/ms_tracker_comparison_top3.csv}
+\caption{Performance comparison of the Mean-Shift tracker between 5 different image sequences (\textit{Sequence}) and corresponding parameters (\textit{Bins, Eps, Alpha, Lambda}). Performance is measured as failures per frame (\textit{FPF}) and frames per second (\textit{FPS}). This table contains only the top 3 measurements for each image sequence (top 15 out of 540).}
+\label{tbl_ms_tracker_performance}
+\end{table}
 
 \section{Conclusion}
 
