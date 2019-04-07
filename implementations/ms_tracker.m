@@ -1,10 +1,10 @@
-function [n_frames, n_failures, imgs] = ms_tracker(dataset_path, sequence, bins, eps, lambda, steps, alpha, render)
+function [n_frames, n_failures, imgs] = ms_tracker(dataset_path, sequence, bins, eps, sigma, steps, alpha, render)
 % INPUT:
 % dataset_path: path to the vot challange ("./resources/vot/2018")
 % sequence: vot sequence name ("bolt1")
 % bins: number of bins in color histograms (16)
 % eps: some small number (0.0000000000000000001)
-% lambda: epanechnikov kernel lambda (0.2)
+% sigma: epanechnikov kernel sigma (0.2)
 % steps: max number of steps for meanshift (20)
 % alpha: update model weight, some small value between 0 and 1 (0)
 % render: render frames (true)
@@ -56,10 +56,10 @@ while frame <= numel(img_dir)
     
     if frame == start_frame
         % initialize tracker
-        [tracker, bbox] = initialize(img, gt(frame,:), bins, eps, lambda);
+        [tracker, bbox] = initialize(img, gt(frame,:), bins, eps, sigma);
     else
         % update tracker (target localization + model update)
-        [tracker, bbox] = update(tracker, img, bins, eps, lambda, steps, alpha);
+        [tracker, bbox] = update(tracker, img, bins, eps, sigma, steps, alpha);
     end
         
     if render

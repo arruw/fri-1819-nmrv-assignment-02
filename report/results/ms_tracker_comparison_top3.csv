@@ -1,4 +1,4 @@
-Id,Sequence,Bins,Eps,Alpha,Lambda,FPS,FPF
+Id,Sequence,Bins,Eps,Alpha,Sigma,FPS,FPF
 9,ball1,3,1e-10,0.01,0.4,157.08,0
 6,ball1,3,1e-10,0.001,0.4,154.63,0
 11,ball1,3,1e-07,0,0.2,153.54,0

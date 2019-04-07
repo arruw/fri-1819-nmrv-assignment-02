@@ -1,4 +1,4 @@
-function [state, bbox] = ms_update(state, I, bins, eps, lambda, steps, alpha)
+function [state, bbox] = ms_update(state, I, bins, eps, sigma, steps, alpha)
 
     % get template region with padding
     x1 = state.region(1);

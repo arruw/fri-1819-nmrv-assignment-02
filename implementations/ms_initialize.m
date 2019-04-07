@@ -1,4 +1,4 @@
-function [state, bbox] = ms_initialize(I, bbox, bins, eps, lambda)
+function [state, bbox] = ms_initialize(I, bbox, bins, eps, sigma)
    
     x1 = round(bbox(1));
     x2 = round(x1 + bbox(3));
@@ -17,7 +17,7 @@ function [state, bbox] = ms_initialize(I, bbox, bins, eps, lambda)
           
     state = struct('template', template, 'size', [x2 - x1 + 1, y2 - y1 + 1]);
     state.region = [x1 y1 x2 y2];   
-    state.kernel = create_epanechnik_kernel(state.size(2), state.size(1), lambda);
+    state.kernel = create_epanechnik_kernel(state.size(2), state.size(1), sigma);
     state.q = extract_histogram(template, bins, state.kernel);
     
     kx2 = floor(state.size(1) / 2);

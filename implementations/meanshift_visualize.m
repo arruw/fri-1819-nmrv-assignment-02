@@ -100,8 +100,8 @@ function plot_square(x, y, n)
     plot(x, y, '--r', 'LineWidth', 1);
 end
 
-function shadow = gaussian_shadow(n, lambda)
-    shadow = -fspecial('gaussian', [n n], lambda);
+function shadow = gaussian_shadow(n, sigma)
+    shadow = -fspecial('gaussian', [n n], sigma);
 end
 
 function shadow = epanechnikov_shadow(n)
